@@ -1,5 +1,7 @@
 # encoding: utf-8
 #--
+#   Copyright (C) 2010 Marko Peltola <marko@markopeltola.com>
+#   Copyright (C) 2010 Tero Hänninen <tero.j.hanninen@jyu.fi>
 #   Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -35,8 +37,11 @@ class GroupsController < ApplicationController
         :project_ids => @group.all_related_project_ids,
       }], 
       :order => "events.created_at desc", 
-      :include => [:user, :project])
+      :include => [:user, :project]).delete_if { |e| !e.can_be_viewed_by?(current_user) }
     @memberships = @group.memberships.find(:all, :include => [:user, :role])
+    @repositories = @group.repositories.mainlines.delete_if { |r| !r.can_be_viewed_by?(current_user) }
+    @projects = @group.projects.delete_if { |p| !p.can_be_viewed_by?(current_user) }
+    @clones = @group.repositories.clones.delete_if { |p| !p.can_be_viewed_by?(current_user) }
   end
   
   def new

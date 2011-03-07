@@ -1,5 +1,6 @@
 <%
 #--
+#   Copyright (C) 2010 Marko Peltola <marko@markopeltola.com>
 #   Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -26,6 +27,10 @@
 
 	<ul class="form">
 		<fieldset>
+			<li><%= f.label "View" %>
+				<div><%= check_box_tag "fake_tag", "view", @committership.viewer?, :disabled => 'disabled', :checked => 'checked' -%></div>
+				<%= hidden_field_tag "permissions[]", "view" -%>
+			</li>
 			<li><%= f.label "Review" %>
 				<div><%= check_box_tag "permissions[]", "review", @committership.reviewer? -%></div>
 			</li>
